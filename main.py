@@ -105,7 +105,7 @@ def auth(ip):
 @ip_snatcher
 def plot_complete_auth(ip, code, uuid, username):
     SPOOF_MSG = "imagine somebody actually trying to spoof their login xD"
-    if ip == os.getenv("DF_IP", "54.39.29.75") or ip == "127.0.0.1":
+    if ip in os.getenv("DF_IPS", "51.222.245.229,54.39.29.75").split(","):
         user_agent = decode_df_user_agent(request.headers.get("User-Agent", ""))
         if user_agent == None:
             return SPOOF_MSG
