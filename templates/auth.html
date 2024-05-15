@@ -1,0 +1,21 @@
+{%extends "base.html"%}
+
+{%block main%}
+<h1>Login to <span class="highlight">{{application_name}}</span></h1>
+
+<p>Run <span class="highlight">/join {{plot_id}}</span> in-game and enter code</p>
+<h1 class="code" id="code">{{code}}</h1>
+{% if not plot_id_beta == None %}<p class="small">Plot <b>{{plot_id_beta}}</b> can be used on Node Beta.</p>{% endif %}
+
+<div class="or"></div>
+
+<div class="coming_soon">
+    <a class="button" href="/auth/microsoft">Microsoft Login</a>
+    <a class="button" href="/auth/email_pwd">Email & Password Login</a>
+    <a class="button secondary" href="/register" target="_blank">Create Email & Password Login</a>
+</div>
+
+<p class="small">You will be redirected to <i id="redir-loc">{{redirect}}</i>.</p>
+
+<script src="/static/js/auth_wait.js"></script>
+{%endblock main%}

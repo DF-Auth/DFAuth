@@ -1,0 +1,204 @@
+/* DFAuth Styling */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --colour-bg-0: #121212;
+    --colour-bg-1: #242424;
+    --colour-bg-2: #363636;
+
+    --colour-bg-1-transparent: #24242483;
+
+    --pane-bg: var(--colour-bg-1);
+
+    --colour-text: #fafafa;
+    --colour-text-1: #7d7d7d;
+    --colour-text-2: #b5b5b5;
+
+    --colour-primary: #4ac550;
+    --colour-secondary: #258c6a;
+    --colour-tertiary: #764c8b;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    user-select: none;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: var(--colour-bg-0);
+    color: var(--colour-text);
+    font-family: "Roboto", sans-serif;
+}
+
+.content {
+    background-color: var(--pane-bg);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.highlight {
+    color: var(--colour-secondary);
+}
+
+.code {
+    color: var(--colour-primary);
+    font-size: 5em;
+    font-family: "Roboto Mono", monospace;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    border: var(--colour-primary) solid 1px;
+}
+
+.or {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 1px;
+    width: 100%;
+    background-color: var(--colour-text-1);
+    position: relative;
+}
+
+.or::after {
+    content: "OR";
+    background-color: var(--pane-bg);
+    color: var(--colour-text-1);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.button {
+    display: block;
+    padding: 15px;
+    width: calc(100% - 30px);
+    border: var(--colour-secondary) 1px solid;
+    border-radius: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: var(--colour-primary);
+    color: var(--colour-text);
+    text-decoration: none;
+    transition: background-color 150ms;
+}
+
+.button:hover {
+    background-color: var(--colour-secondary);
+}
+
+.button.secondary {
+    background-color: transparent;
+    color: var(--colour-text-2);
+    transition: color 150ms;
+}
+
+.button.secondary:hover {
+    color: var(--colour-text);
+}
+
+.button.tertiary {
+    background-color: transparent;
+    color: var(--colour-text-2);
+    transition: color 150ms;
+    border: var(--colour-tertiary) 1px solid;
+}
+
+.button.tertiary:hover {
+    color: var(--colour-text);
+}
+
+.coming_soon {
+    position: relative;
+}
+
+.coming_soon::before {
+    content: " ";
+    position: absolute;
+    width: calc(100% + 16px);
+    height: calc(100% + 16px);
+    backdrop-filter: blur(2px);
+    left: -8px;
+    top: -8px;
+    background-color: rgba(0, 0, 0, 0.125);
+    border-radius: 23px;
+}
+
+.coming_soon::after {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    content: "Coming Soon";
+    font-size: x-large;
+    text-shadow: rgba(0, 0, 0, 0.25) 0px 3px 8px;
+}
+
+.balls {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.small {
+    font-size: small;
+    margin: 0;
+}
+
+dfauthmeta {
+    display: none;
+}
+
+.versioninfo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 5px;
+    font-size: xx-small;
+}
+
+@media screen and (max-width: 700px) {
+    :root {
+        --pane-bg: var(--colour-bg-1-transparent);
+    }
+    .content {
+        width: calc(100% - 40px);
+        border-radius: 0px;
+        max-width: 100%;
+    }
+
+
+    .or {
+        background: none;
+    }
+    .or::after {
+        background: var(--colour-bg-1);
+        color: var(--colour-tertiary);
+        font-weight: 900;
+        font-size: large;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .code {
+        font-size: 4em;
+    }
+}

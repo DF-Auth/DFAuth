@@ -1,0 +1,15 @@
+{%extends "base.html"%}
+
+{%block main%}
+<h1>Login Successfull!</h1>
+<b>Username:</b> {{response["username"]}}<br>
+<b>UUID:</b> {{response["uuid"]}}<br>
+<b>IP:</b> {{response["ip"]}}<br>
+<h2>How to use in your application</h2>
+<p>Our API documentation (and pre-built libraries) can be found on our GitHub.</p>
+
+<div class="buttontable">
+    <a class="button x1 y1" href="https://github.com/DF-Auth" target="_empty">View on GitHub</a>
+    <a class="button secondary x2 y1" href="/">Back Home</a>
+</div>
+{%endblock main%}

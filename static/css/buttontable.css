@@ -1,0 +1,31 @@
+/* Button Table css - I thought a seperate file would be useful for this as there is quite alot of stuff */
+
+.buttontable {
+    width: 100%;
+    display: grid;
+    gap: 15px;
+    grid-auto-columns: 1fr;
+}
+
+.buttontable > .button {
+    margin: 0;
+}
+
+/* LOCATIONS */
+
+.buttontable > .button.x1 {
+    grid-column: 1;
+}
+
+.buttontable > .button.y1 {
+    grid-row: 1;
+}
+
+
+.buttontable > .button.x2 {
+    grid-column: 2;
+}
+
+.buttontable > .button.y2 {
+    grid-row: 2;
+}
