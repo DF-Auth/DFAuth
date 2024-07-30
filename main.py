@@ -10,6 +10,7 @@ from typing import Union
 import eventlet
 import os
 import re
+import io
 
 eventlet.monkey_patch()
 from eventlet import wsgi
@@ -64,7 +65,7 @@ def ip_snatcher(f):
         proxy_ip_header = os.getenv("PROXY_IP_HEADER")
         if not proxy_ip_header == None:
             ip = request.headers.get(proxy_ip_header, ip)
-        print(ip)
+        #print(ip)
         return f(ip, *args, **kwargs)
     return decorated_function
 
@@ -114,7 +115,7 @@ def plot_complete_auth(ip, code, uuid, username):
             return SPOOF_MSG
         if not plot_owner == os.getenv("PLOT_OWNER"):
             return SPOOF_MSG
-        print(f"Logging in {username} ({uuid}) with code {code}.")
+        #print(f"Logging in {username} ({uuid}) with code {code}.")
         if code in codes.keys():
             codes[code]["uuid"] = uuid
             codes[code]["username"] = username
@@ -146,7 +147,7 @@ def my_ip(ip):
 @sock.route("/auth_wait")
 def auth_wait(ws: Server):
     code = ws.receive()
-    print("Waiting for auth with code", code)
+    #print("Waiting for auth with code", code)
     while True:
         data = ws.receive(.01)
         data = ws.receive(1)
@@ -163,5 +164,14 @@ def auth_wait(ws: Server):
             ws.close()
             return
 
+class DeadEnd(io.BufferedWriter):
+
+    def __init__(self) -> None:
+        pass
+
+    def write(self, __buffer) -> int:
+        pass
+
+
 if __name__ == "__main__":
-    wsgi.server(eventlet.listen((os.getenv("HOST"), int(os.getenv("PORT")))), app)
+    wsgi.server(eventlet.listen((os.getenv("HOST"), int(os.getenv("PORT")))), app, log=DeadEnd())
