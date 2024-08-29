@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, redirect, render_template, request, jsonify, Response
 from flask_sock import Sock, Server
 from werkzeug.exceptions import HTTPException, NotFound, BadRequest
@@ -7,19 +10,17 @@ from uuid import uuid4
 from dotenv import load_dotenv
 from functools import wraps
 from typing import Union
-import eventlet
 import os
 import re
 import io
-
-eventlet.monkey_patch()
+import fireclient_auth
 from eventlet import wsgi
 
 load_dotenv()
 
 
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 
 codes = {}
@@ -72,7 +73,7 @@ def ip_snatcher(f):
 app = Flask(__name__)
 sock = Sock(app)
 
-app.jinja_env.globals.update(plot_id=os.getenv("PLOT_ID"), plot_id_beta=os.getenv("PLOT_ID_BETA"), plot_owner=os.getenv("PLOT_OWNER"), ws_address=get_ws_address(), version=VERSION)
+app.jinja_env.globals.update(plot_id=os.getenv("PLOT_ID"), plot_id_beta=os.getenv("PLOT_ID_BETA"), plot_owner=os.getenv("PLOT_OWNER"), ws_address=get_ws_address(), version=VERSION, fca_key=fireclient_auth.get_public_der_base64())
 
 @app.errorhandler(HTTPException)
 def error(e: HTTPException):
@@ -143,6 +144,26 @@ def api_get_token(token):
 @ip_snatcher
 def my_ip(ip):
     return ip
+
+@app.route("/.fireclient_auth_finish")
+@ip_snatcher
+def fireclient_auth_finish(ip):
+    secretKey = request.args.get("secretKey")
+    username = request.args.get("username")
+
+    uuid = fireclient_auth.auth_finish(secretKey, username)
+
+    retrievaltoken = uuid4().hex
+    tokens[retrievaltoken] = {
+        "uuid": uuid,
+        "username": username,
+        "ip": ip
+    }
+
+    return jsonify({
+        "token": retrievaltoken
+    })
+
 
 @sock.route("/auth_wait")
 def auth_wait(ws: Server):
