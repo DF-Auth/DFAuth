@@ -6,9 +6,15 @@ const fcWS = new WebSocket("ws://localhost:39870");
 
 const fc_redir_loc = document.getElementById("redir-loc").innerText;
 
+const fc_content = document.getElementById("content");
+
 let STATE = "waiting_for_welcome";
 
 let connection_id = null;
+
+fcWS.addEventListener("open", event => {
+    show_message("Logging in via FireClient", "Communicating with FireClient...");
+})
 
 fcWS.addEventListener("message", event => {
     var data = JSON.parse(event.data);
@@ -58,8 +64,25 @@ function auth_finished(data) {
             let token = response["token"];
             var redir = redir_loc+"?token="+token;
             document.location.href = redir;
+        } else if (xmlHttp.readyState == 4) {
+            show_message("Error!", "Server responded with status \""+xmlHttp.statusText+"\" whilst logging in with FireClient. Reload to try again, or disable the API in your FireClient settings.")
         }
     }
     xmlHttp.open("GET", "/.fireclient_auth_finish?secretKey="+encodeURIComponent(secretKey)+"&username="+username, true); // true for asynchronous 
     xmlHttp.send(null);
+    show_message("Logging in via FireClient", "Waiting for server...");
+}
+
+function show_message(title, subtitle) {
+    fc_content.textContent = ""; // Clear content
+
+    // Create title
+    let title_elem = document.createElement("h2");
+    title_elem.innerText = title;
+    fc_content.appendChild(title_elem);
+
+    // Create subtitle
+    let subtitle_elem = document.createElement("p");
+    subtitle_elem.innerText = subtitle;
+    fc_content.appendChild(subtitle_elem);
 }
