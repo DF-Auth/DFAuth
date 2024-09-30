@@ -12,6 +12,8 @@ let STATE = "waiting_for_welcome";
 
 let connection_id = null;
 
+let content_backup = [];
+
 fcWS.addEventListener("open", event => {
     show_message("Logging in via FireClient", "Communicating with FireClient...");
 })
@@ -54,6 +56,18 @@ function auth_finished(data) {
     console.log("Auth finished!");
     STATE = "done";
     fcWS.close();
+
+    if (data["success"] == false) {
+        console.log("Couldn't authenticate.", data["error"]);
+        if (data["error"]["type"] == "com.alignedcookie88.fireclient.api.packet.DoAuthPacket$AuthDisabledException") {
+            show_message("FireClient Login is Disabled", "You have disabled FireClient auth in the mod's settings screen. You can re-enable it under the \"API\" category.\n\nYou will be returned to the usual login in 3.5s.")
+        } else {     
+            show_message("Error!", "FireClient threw an error whilst authenticating: "+data["error"]["type"]+": "+data["error"]["message"]+"\n\nYou will be returned to the usual login in 3.5s.")
+        }
+        restore_main_content_after_delay()
+        return
+    }
+
     secretKey = data["response"]["secretKey"];
     username = data["response"]["username"];
 
@@ -65,7 +79,8 @@ function auth_finished(data) {
             var redir = redir_loc+"?token="+token;
             document.location.href = redir;
         } else if (xmlHttp.readyState == 4) {
-            show_message("Error!", "Server responded with status \""+xmlHttp.statusText+"\" whilst logging in with FireClient. Reload to try again, or disable the API in your FireClient settings.")
+            show_message("Error!", "Server responded with status \""+xmlHttp.statusText+"\" whilst logging in with FireClient. Reload to try again, or disable the API in your FireClient settings.\n\nYou will be returned to the usual login in 3.5s.")
+            restore_main_content_after_delay();
         }
     }
     xmlHttp.open("GET", "/.fireclient_auth_finish?secretKey="+encodeURIComponent(secretKey)+"&username="+username, true); // true for asynchronous 
@@ -74,6 +89,7 @@ function auth_finished(data) {
 }
 
 function show_message(title, subtitle) {
+    content_backup.push(fc_content.innerHTML);
     fc_content.textContent = ""; // Clear content
 
     // Create title
@@ -85,4 +101,14 @@ function show_message(title, subtitle) {
     let subtitle_elem = document.createElement("p");
     subtitle_elem.innerText = subtitle;
     fc_content.appendChild(subtitle_elem);
+}
+
+function restore_main_content_after_delay() {
+    setTimeout(
+        function() {
+            console.log("Restoring content.");
+            fc_content.innerHTML = content_backup[0];
+        },
+        3500
+    )
 }
