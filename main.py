@@ -9,7 +9,6 @@ from json import dumps
 from uuid import uuid4
 from dotenv import load_dotenv
 from functools import wraps
-from typing import Union
 import os
 import re
 import io
@@ -48,7 +47,7 @@ DF_USER_AGENT_REGEX = "DiamondFire/([0123456789\.]*) \(([0123456789]*), ([abcdef
 DF_USER_AGENT_REGEX_DF_VERSION = 1
 DF_USER_AGENT_REGEX_PLOT_ID = 2
 DF_USER_AGENT_REGEX_PLOT_OWNER = 3
-def decode_df_user_agent(user_agent: str) -> Union[tuple[str, str, str], None]:
+def decode_df_user_agent(user_agent: str):
     match: re.Match = re.search(DF_USER_AGENT_REGEX, user_agent)
     if match == None:
         return None
