@@ -65,6 +65,7 @@ def ip_snatcher(f):
         proxy_ip_header = os.getenv("PROXY_IP_HEADER")
         if not proxy_ip_header == None:
             ip = request.headers.get(proxy_ip_header, ip)
+        ip = ip.split(",")[0]
         #print(ip)
         return f(ip, *args, **kwargs)
     return decorated_function
